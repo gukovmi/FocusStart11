@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var textObservable: Observable<String>
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -41,10 +42,13 @@ class MainActivity : AppCompatActivity() {
             )
 
         val searchObservable = RxEditTextObservable.fromView(searchingFieldEditText)
+
         compositeDisposable.add(
             searchObservable
+                .subscribeOn(Schedulers.io())
                 .debounce(700, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
+                .observeOn(Schedulers.io())
                 .subscribe({
                     find(it)
                 }, {
@@ -69,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribe({
                     searchingCountTextView.text =
                             //this.getString(R.string.found_text_view, count.toString())
-                        "Found : ${count}"
+                        "Found : $count"
                 }, {
                     Log.e("textObservable", it.localizedMessage)
                 })
