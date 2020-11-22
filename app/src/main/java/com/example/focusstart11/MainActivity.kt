@@ -26,17 +26,11 @@ class MainActivity : AppCompatActivity() {
             }
         textTextView.text = fileString
 
+        val delimiters = arrayOf("\n", " ", ".", ",", ";", ":", "!", "?")
         textObservable = Observable
             .fromIterable(
                 fileString.split(
-                    "\n",
-                    " ",
-                    ".",
-                    ",",
-                    ";",
-                    ":",
-                    "!",
-                    "?",
+                    *delimiters,
                     ignoreCase = true
                 )
             )
